@@ -1,210 +1,128 @@
 <template>
-<img src="@/assets/slice11.png" />
-
-<div class="container">
-  <div class="wrapper">
-    <div class="flair flair--1"></div>
-  </div>
-      <div class="wrapper">
-    <div class="flair flair--3"></div>
-  </div>
-  <div class="wrapper">
-    <div class="flair flair--2"></div>
-  </div>
-
-  <h4>Spin us, Drag us...</h4>
-</div>
-
-<!-- <div class="grid">
-    <div class="grid__item pos-1">
-        <div class="grid__item-img" style="background-image:url(@/assets/slice2.png);">
-          <img src="@/assets/slice2.png" />
-        </div>
+    <div id="smooth-wrapper" ref="{main}">
+    <div id="smooth-content">
+      <header class="header">
+        <h1 class="title">GreenSock ScrollSmoother on a Nuxt3 App</h1>
+        <button class="button" @click="scrollTo">Jump to C</button>
+      </header>
+      <div class="box box-a gradient-purple" data-speed="0.5">a</div>
+      <div class="box box-b gradient-green" data-speed="0.8">b</div>
+      <div class="box box-c gradient-orange" data-speed="1.5">c</div>
+      <div class="line"></div>
     </div>
-    <div class="grid__item pos-2">
-        <div class="grid__item-img" style="background-image:url(@/assets/slice1.png);"></div>
-    </div>
-    <div class="grid__item pos-3">
-        <div class="grid__item-img" style="background-image:url(@/assets/slice22.png);"></div>
-    </div>
-    ... -->
-<!-- </div> -->
+  </div>
 </template>
 
+
 <script>
-// import { gsap } from 'gsap/dist/gsap'
-// import { TextPlugin } from 'gsap/dist/gsap/TextPlugin'
-// import { ScrollTrigger } from 'gsap/dist/gsap/ScrollTrigger'
-// import { Draggable } from 'gsap/dist/gsap/Draggable'
-// import { InertiaPlugin } from 'gsap/dist/gsap/InertiaPlugin'
+import { onMounted, onUnmounted, ref } from 'vue';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
-// if (process.client) {
-// gsap.registerPlugin(TextPlugin, ScrollTrigger, Draggable, InertiaPlugin)
-// } else {
-//   console.log("problem problem")
-// }
+if (typeof window !== 'undefined') {
+  gsap.config({
+    trialWarn: false,
+  });
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+}
 
-//gsap.registerPlugin(Draggable, InertiaPlugin);
+export default {
+  setup() {
+    const main = ref();
+    let ctx;
+    let smoother;
 
-// Draggable.create(".flair--1", {
-//   type: "x",
-//   bounds: ".container"
-// });
+    const scrollTo = () => {
+      smoother.scrollTo('.box-c', true, 'center center');
+    };
 
-// Draggable.create(".flair--3", {
-//   type: "rotation",
-//   inertia: true
-// });
+    onMounted(() => {
+      ctx = gsap.context(() => {
+        // create the smooth scroller FIRST!
+        // smoother = ScrollSmoother.create({
+        //   smooth: 2, // seconds it takes to "catch up" to native scroll position
+        //   effects: true, // look for data-speed and data-lag attributes on elements and animate accordingly
+        // });
+        ScrollTrigger.create({
+          trigger: '.box-c',
+          pin: true,
+          start: 'center center',
+          end: '+=300',
+          markers: true,
+        });
+      }, main.value);
+    });
+    onUnmounted(() => {
+      ctx.revert();
+    });
 
-// Draggable.create(".flair--2", {
-//   bounds: ".container",
-//   inertia: true
-// });
-
-// export default class Grid {
-//     constructor(el) {
-//         this.DOM = {el: el};
-//         this.gridItems = [];
-//         this.items = [...this.DOM.el.querySelectorAll('.grid__item')];
-//         this.items.forEach(item => this.gridItems.push(new GridItem(item)));
-       
-//         this.showItems();
-//     }
-
-// };
-
-// const grid = new Grid(document.querySelector('.grid'));
-
-// function showItems() {
-//     gsap.timeline()
-//     .set(this.items, {scale: 0.7, opacity: 0}, 0)
-//     .to(this.items, {
-//         duration: 2,
-//         ease: 'Expo.easeOut',
-//         scale: 1,
-//         stagger: {amount: 0.6, grid: 'auto', from: 'center'}
-//     }, 0)
-//     .to(this.items, {
-//         duration: 3,
-//         ease: 'Power1.easeOut',
-//         opacity: 0.4,
-//         stagger: {amount: 0.6, grid: 'auto', from: 'center'}
-//     }, 0);
-// };
-
-// class GridItem {
-//     constructor(el) {
-//         this.DOM = {el: el};
-//         this.move();
-//     }
-//     //...
-// };
-
-// function move() {
-//     // amount to move in each axis
-//     let translationVals = {tx: 0, ty: 0};
-//     // get random start and end movement boundaries
-//     const xstart = getRandomNumber(15,60);
-//     const ystart = getRandomNumber(15,60);
-   
-//     // infinite loop
-//     const render = () => {
-//         // Calculate the amount to move.
-//         // Using linear interpolation to smooth things out.
-//         // Translation values will be in the range of [-start, start] for a cursor movement from 0 to the window's width/height
-//         translationVals.tx = lerp(translationVals.tx, map(mousepos.x, 0, winsize.width, -xstart, xstart), 0.07);
-//         translationVals.ty = lerp(translationVals.ty, map(mousepos.y, 0, winsize.height, -ystart, ystart), 0.07);
-       
-//         gsap.set(this.DOM.el, {x: translationVals.tx, y: translationVals.ty});  
-//         requestAnimationFrame(render);
-//     }
-//     requestAnimationFrame(render);
-// }
-
+    return { main, scrollTo };
+  },
+};
 </script>
 
 <style>
-
-.container {
-  position: relative;
-  width: 90vw;
-  height: 90vh;
-  max-width: 90vh;
-  max-height: 90vw;
+.box {
+  width: 75px;
+  height: 75px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  border-radius: 9px;
-  border: solid 2px var(--mid);
-}
-
-h4 {
-  color: var(--mid);
-  position: absolute;
-  width: 100%;
-  left: 0;
-  right: 0;
-  bottom: 1rem;
+  justify-content: center;
   text-align: center;
-  pointer-events: none;
+  background-color: var(--green);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.2;
+  will-change: transform;
+  margin-bottom: 20px;
 }
 
-.flair {
+.box-a {
+  top: 200px;
+}
+
+.box-b {
+  top: 600px;
+}
+
+.box-c {
+  top: 1000px;
+}
+
+/* button:not('.box') { breaking for some reason in codepen? */
+  button {
+  display: inline-block;
+  outline: none;
+  padding: 8px 14px;
+  background: var(--dark);
+  border: solid 2px var(--light);
+  color: var(--light);
+  text-decoration: none;
+  border-radius: 99px;
+  padding: 12px 25px;
+  text-transform: uppercase;
+  font-weight: 600;
   cursor: pointer;
-  width: 70px;
-  height: 70px;
-  max-height: 15vh;
-  max-width: 15vh;
+  line-height: 18px;
 }
 
-/* .grid {
-	pointer-events: none;
-	position: absolute;
-	width: 110%;
-	height: 110%;
-	top: -5%;
-	left: -5%;
-	display: grid;
-	grid-template-columns: repeat(50,2%);
-	grid-template-rows: repeat(50,2%);
+.gradient-green {
+  background: var(--gradient-macha),
+    url('https://assets.codepen.io/16327/noise-e82662fe.png'); /* Replace with the path to your noise texture image */
+  background-blend-mode: color-dodge; /* Blend the noise texture with the gradient */
 }
 
-.grid__item {
-	position: relative;
+.gradient-orange {
+  background: var(--gradient-orange-crush),
+    url('https://assets.codepen.io/16327/noise-e82662fe.png'); /* Replace with the path to your noise texture image */
+  background-blend-mode: color-dodge; /* Blend the noise texture with the gradient */
 }
 
-.grid__item-img {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	background-size: cover;
-	background-position: 50% 50%;
+.gradient-purple {
+  background: var(--gradient-purple-haze),
+    url('https://assets.codepen.io/16327/noise-e82662fe.png'); /* Replace with the path to your noise texture image */
+  background-blend-mode: color-dodge; /* Blend the noise texture with the gradient */
 }
-
-.pos-1 {
-	grid-area: 10 / 1 / 26 / 7;
-}
-
-.pos-2 {
-	grid-area: 1 / 18 / 9 / 27;
-}
-
-.pos-3 {
-	grid-area: 1 / 36 / 14 / 42;
-}
-
-.grid--img .grid__item {
-	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	will-change: transform;
-}
-
-.grid--img .grid__item-img {
-	flex: none;
-	width: calc(100% + 100px);
-	height: calc(100% + 100px);
-	will-change: transform;
-} */
 </style>
