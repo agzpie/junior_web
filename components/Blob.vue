@@ -1,65 +1,59 @@
 <template>
-    <div id="smooth-wrapper" ref="{main}">
-    <div id="smooth-content">
-      <header class="header">
-        <h1 class="title">GreenSock ScrollSmoother on a Nuxt3 App</h1>
-        <button class="button" @click="scrollTo">Jump to C</button>
-      </header>
-      <div class="box box-a gradient-purple" data-speed="0.5">a</div>
-      <div class="box box-b gradient-green" data-speed="0.8">b</div>
-      <div class="box box-c gradient-orange" data-speed="1.5">c</div>
-      <div class="line"></div>
-    </div>
+  <section class="panel center column gradient-blue text-dark">
+    <h1>Basic ScrollTrigger in Nuxt 3</h1>
+    <h2>Scroll down to see the magic happen!!</h2>
+  </section>
+  <div class="panel center column" ref="main">
+    <div class="box gradient-green">box</div>
+    <div class="box gradient-green">box</div>
+    <div class="box gradient-green">box</div>
   </div>
+  <section class="panel center gradient-orange column text-dark">
+    <h1>The End!</h1>
+    <h2 class="center">
+      For more information visit:&nbsp;
+      <a
+        href="https://greensock.com/scrolltrigger/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        greensock.com/scrolltrigger/
+      </a>
+    </h2>
+  </section>
 </template>
 
 
-<script>
+<script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
-if (typeof window !== 'undefined') {
-  gsap.config({
-    trialWarn: false,
-  });
-  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-}
+gsap.registerPlugin(ScrollTrigger);
 
-export default {
-  setup() {
-    const main = ref();
-    let ctx;
-    let smoother;
+const main = ref();
+let ctx;
 
-    const scrollTo = () => {
-      smoother.scrollTo('.box-c', true, 'center center');
-    };
-
-    onMounted(() => {
-      ctx = gsap.context(() => {
-        // create the smooth scroller FIRST!
-        // smoother = ScrollSmoother.create({
-        //   smooth: 2, // seconds it takes to "catch up" to native scroll position
-        //   effects: true, // look for data-speed and data-lag attributes on elements and animate accordingly
-        // });
-        ScrollTrigger.create({
-          trigger: '.box-c',
-          pin: true,
-          start: 'center center',
-          end: '+=300',
-          markers: true,
-        });
-      }, main.value);
+onMounted(() => {
+  ctx = gsap.context((self) => {
+    const boxes = self.selector('.box');
+    boxes.forEach((box) => {
+      gsap.to(box, {
+        x: 150,
+        scrollTrigger: {
+          trigger: box,
+          start: 'bottom bottom',
+          end: 'top 20%',
+          scrub: true,
+        },
+      });
     });
-    onUnmounted(() => {
-      ctx.revert();
-    });
+  }, main.value); // <- Scope!
+});
 
-    return { main, scrollTo };
-  },
-};
+onUnmounted(() => {
+  ctx.revert(); // <- Easy Cleanup!
+});
 </script>
 
 <style>
@@ -71,7 +65,7 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: var(--green);
+  background-color: green;
   font-weight: 600;
   color: var(--dark);
   line-height: 1.2;
