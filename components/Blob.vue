@@ -4,8 +4,12 @@
     <h2>Scroll down to see the magic happen!!</h2>
   </section>
   <div class="panel center column" ref="main">
-    <div class="box gradient-green">box</div>
-    <div class="box gradient-green">box</div>
+    <div class="box gradient-green">
+      <img src="assets/slice1.svg" class="w-96">box
+    </div>
+    <div class="box gradient-green">box
+      
+    </div>
     <div class="box gradient-green">box</div>
   </div>
   <section class="panel center gradient-orange column text-dark">
@@ -39,7 +43,7 @@ onMounted(() => {
     const boxes = self.selector('.box');
     boxes.forEach((box) => {
       gsap.to(box, {
-        x: 150,
+        x: 350,
         scrollTrigger: {
           trigger: box,
           start: 'bottom bottom',
@@ -58,8 +62,6 @@ onUnmounted(() => {
 
 <style>
 .box {
-  width: 75px;
-  height: 75px;
   border-radius: 12px;
   display: flex;
   align-items: center;

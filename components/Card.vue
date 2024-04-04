@@ -19,7 +19,7 @@
 <script setup>
 defineProps({
   title: String,
-  doublePanel: Boolean,
+  doublePanel: String,
   items: Array
 })
 
