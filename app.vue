@@ -17,6 +17,7 @@
     </ul>
   </Card>
   <Blob />
+  <!-- <History /> -->
 </template>
 
 <script setup>
@@ -25,7 +26,8 @@ import { ref } from 'vue'
 const topBar = ref([
   { name: "Home", source: "" },
   { name: "Media", source: "" },
-  { name: "Contact", source: "" }
+  { name: "Contact", source: "" },
+  { name: "History", source: "" }
 ])
 const contactCard = ref([
   { subtitle: "Dane" },
