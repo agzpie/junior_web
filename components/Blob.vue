@@ -1,29 +1,13 @@
 <template>
-  <section class="panel center column gradient-blue text-dark">
-    <h1>Basic ScrollTrigger in Nuxt 3</h1>
-    <h2>Scroll down to see the magic happen!!</h2>
-  </section>
-  <div class="panel center column" ref="main">
-    <div class="box gradient-green">
-      <img src="assets/slice1.svg" class="w-96">box
+  <div class="panel center column overflow-x-clip" ref="main">
+    <div class="box box-a gradient-green">
+      <img src="assets/slice1.svg" class="w-96" />
     </div>
-    <div class="box gradient-green">box
-      
+    <div class="box box-b gradient-green right-20">
+      <img src="assets/slice2.svg" class="w-96" />
     </div>
-    <div class="box gradient-green">box</div>
   </div>
-  <section class="panel center gradient-orange column text-dark">
-    <h1>The End!</h1>
-    <h2 class="center">
-      For more information visit:&nbsp;
-      <a
-        href="https://greensock.com/scrolltrigger/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        greensock.com/scrolltrigger/
-      </a>
-    </h2>
+  <section class="panel center gradient-orange column text-[#ca3811] text-semibold text-lg">
   </section>
 </template>
 
@@ -40,18 +24,56 @@ let ctx;
 
 onMounted(() => {
   ctx = gsap.context((self) => {
-    const boxes = self.selector('.box');
-    boxes.forEach((box) => {
-      gsap.to(box, {
+    const boxA = self.selector('.box-a');
+    const boxB = self.selector('.box-b');
+
+      gsap.to(boxA, {
         x: 350,
+        rotation: 15,
+        duration: 1,
+        opacity: 0.5,
+        markers: true,
         scrollTrigger: {
-          trigger: box,
+          trigger: boxA,
           start: 'bottom bottom',
-          end: 'top 20%',
-          scrub: true,
+          end: 'top',
+          scrub: 2,
+          toggleClass: 'active'
         },
       });
-    });
+
+      gsap.to(boxB, {
+        x: -300,
+        rotation: 35,
+        duration: 1,
+        opacity: 0.2,
+        markers: true,
+        scrollTrigger: {
+          trigger: boxB,
+          start: 'bottom bottom',
+          end: 'top',
+          scrub: 1,
+          toggleClass: 'active'
+        },
+      });
+
+    //const boxes = self.selector('.box');
+    // boxes.forEach((box) => {
+    //   gsap.to(box, {
+    //     x: 350,
+    //     rotation: 15,
+    //     duration: 1,
+    //     markers: true,
+    //     scrollTrigger: {
+    //       trigger: box,
+    //       start: 'bottom bottom',
+    //       end: 'top',
+    //       scrub: 2,
+    //       toggleClass: 'active'
+    //     },
+    //   });
+    // });
+
   }, main.value); // <- Scope!
 });
 
@@ -64,8 +86,8 @@ onUnmounted(() => {
 .box {
   border-radius: 12px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: start; */
+  /* justify-content: start; */
   text-align: center;
   background-color: green;
   font-weight: 600;
@@ -73,14 +95,25 @@ onUnmounted(() => {
   line-height: 1.2;
   will-change: transform;
   margin-bottom: 20px;
+  transition-property: all;
+  transition-duration: 300ms;
+  z-index: 10;
 }
 
-.box-a {
+/* .box.active {
+  filter: opacity(30%) blur(15px) hue-rotate(4deg) brightness(118%) contrast(119%);
+  /* filter: opacity(30%) blur(15px) invert(48%) sepia(39%) saturate(1476%) hue-rotate(120deg) brightness(118%) contrast(119%); */
+  /* z-index: 10; */
+/* } */ 
+
+/* .box-a {
   top: 200px;
-}
+  align-items: end;
+} */
 
 .box-b {
-  top: 600px;
+  /* top: 600px; */
+ justify-content: end;
 }
 
 .box-c {
