@@ -22,5 +22,4 @@ defineProps({
   doublePanel: String,
   items: Array
 })
-
 </script>
