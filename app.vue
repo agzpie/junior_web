@@ -88,3 +88,9 @@ onMounted(() => {
 // });
 
 </script>
+
+<style>
+body {
+  @apply bg-slate-50;
+}
+</style>
