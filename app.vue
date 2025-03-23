@@ -1,7 +1,7 @@
 <template>
 <Background />
 
-  <div class="w-full h-screen flex mx-auto justify-center bg-slate-50">
+  <div class="w-full h-screen flex mx-auto justify-center ">
     <TopBar :topBarItems="topBar" />
     <div class="mt-40 mx-auto flex-col">
 
@@ -91,6 +91,6 @@ onMounted(() => {
 
 <style>
 body {
-  @apply bg-slate-50;
+  @apply bg-slate-100;
 }
 </style>
